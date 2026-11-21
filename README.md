@@ -1,4 +1,4 @@
-# E-Commerce Product Intelligence System
+﻿# E-Commerce Product Intelligence System
 
 A Python-based e-commerce product intelligence and data extraction application designed to collect, process, validate, store and export structured product information.
 
@@ -93,39 +93,39 @@ E-Commerce Product Intelligence
 
 ```text
 ecommerce-product-intelligence/
-│
-├── config/
-│   └── logging_config.py
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── logs/
-│
-├── processors/
-│   ├── cleaning.py
-│   ├── pipeline.py
-│   ├── product_parser.py
-│   └── validation.py
-│
-├── scrapers/
-│   ├── base_scraper.py
-│   └── perfume_scraper.py
-│
-├── storage/
-│   ├── database.py
-│   ├── data_exporter.py
-│   ├── excel_exporter.py
-│   └── export_manager.py
-│
-├── tests/
-│
-├── check_robots.py
-├── live_main.py
-├── main.py
-├── requirements.txt
-└── README.md
+â”‚
+â”œâ”€â”€ config/
+â”‚   â””â”€â”€ logging_config.py
+â”‚
+â”œâ”€â”€ data/
+â”‚   â”œâ”€â”€ raw/
+â”‚   â””â”€â”€ processed/
+â”‚
+â”œâ”€â”€ logs/
+â”‚
+â”œâ”€â”€ processors/
+â”‚   â”œâ”€â”€ cleaning.py
+â”‚   â”œâ”€â”€ pipeline.py
+â”‚   â”œâ”€â”€ product_parser.py
+â”‚   â””â”€â”€ validation.py
+â”‚
+â”œâ”€â”€ scrapers/
+â”‚   â”œâ”€â”€ base_scraper.py
+â”‚   â””â”€â”€ perfume_scraper.py
+â”‚
+â”œâ”€â”€ storage/
+â”‚   â”œâ”€â”€ database.py
+â”‚   â”œâ”€â”€ data_exporter.py
+â”‚   â”œâ”€â”€ excel_exporter.py
+â”‚   â””â”€â”€ export_manager.py
+â”‚
+â”œâ”€â”€ tests/
+â”‚
+â”œâ”€â”€ check_robots.py
+â”œâ”€â”€ live_main.py
+â”œâ”€â”€ main.py
+â”œâ”€â”€ requirements.txt
+â””â”€â”€ README.md
 ```
 
 ## 5. Installation
@@ -139,7 +139,7 @@ ecommerce-product-intelligence/
 ### Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ecommerce-product-intelligence.git
+git clone https://github.com/mark123-eng/ecommerce-product-intelligence.git
 
 cd ecommerce-product-intelligence
 ```
@@ -202,11 +202,11 @@ The application generates three output formats.
 
 ```text
 data/processed/
-│
-├── products.db
-├── products.xlsx
-├── products.csv
-└── products.json
+â”‚
+â”œâ”€â”€ products.db
+â”œâ”€â”€ products.xlsx
+â”œâ”€â”€ products.csv
+â””â”€â”€ products.json
 ```
 
 ### Excel
