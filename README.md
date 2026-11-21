@@ -91,42 +91,62 @@ E-Commerce Product Intelligence
 
 ### Project Structure
 
-```text
+
 ecommerce-product-intelligence/
-â”‚
-â”œâ”€â”€ config/
-â”‚   â””â”€â”€ logging_config.py
-â”‚
-â”œâ”€â”€ data/
-â”‚   â”œâ”€â”€ raw/
-â”‚   â””â”€â”€ processed/
-â”‚
-â”œâ”€â”€ logs/
-â”‚
-â”œâ”€â”€ processors/
-â”‚   â”œâ”€â”€ cleaning.py
-â”‚   â”œâ”€â”€ pipeline.py
-â”‚   â”œâ”€â”€ product_parser.py
-â”‚   â””â”€â”€ validation.py
-â”‚
-â”œâ”€â”€ scrapers/
-â”‚   â”œâ”€â”€ base_scraper.py
-â”‚   â””â”€â”€ perfume_scraper.py
-â”‚
-â”œâ”€â”€ storage/
-â”‚   â”œâ”€â”€ database.py
-â”‚   â”œâ”€â”€ data_exporter.py
-â”‚   â”œâ”€â”€ excel_exporter.py
-â”‚   â””â”€â”€ export_manager.py
-â”‚
-â”œâ”€â”€ tests/
-â”‚
-â”œâ”€â”€ check_robots.py
-â”œâ”€â”€ live_main.py
-â”œâ”€â”€ main.py
-â”œâ”€â”€ requirements.txt
-â””â”€â”€ README.md
-```
+│
+├── config/
+│   ├── __init__.py
+│   └── logging_config.py
+│
+├── data/
+│   └── raw/
+│       ├── original_packaging_multiple.html
+│       ├── perfume_testers_multiple.html
+│       ├── perfume_testers_page_2.html
+│       ├── sample_product_card.html
+│       └── sample_tester_product_card.html
+│
+├── processors/
+│   ├── __init__.py
+│   ├── cleaning.py
+│   ├── pipeline.py
+│   ├── product_parser.py
+│   └── validation.py
+│
+├── scrapers/
+│   ├── __init__.py
+│   ├── base_scraper.py
+│   ├── pagination.py
+│   └── perfume_scraper.py
+│
+├── storage/
+│   ├── data_exporter.py
+│   ├── database.py
+│   ├── excel_exporter.py
+│   └── export_manager.py
+│
+├── tests/
+│   ├── test_base_scraper.py
+│   ├── test_cleaning.py
+│   ├── test_data_exporter.py
+│   ├── test_database.py
+│   ├── test_export_manager.py
+│   ├── test_exporter.py
+│   ├── test_logging_manual.py
+│   ├── test_multi_page_pipeline.py
+│   ├── test_pagination.py
+│   ├── test_perfume_scraper.py
+│   ├── test_pipeline.py
+│   ├── test_product_parser.py
+│   └── test_validation.py
+│
+├── .gitignore
+├── check_robots.py
+├── generate_test_fixtures.py
+├── live_main.py
+├── main.py
+├── requirements.txt
+└── README.md
 
 ## 5. Installation
 
@@ -198,16 +218,12 @@ The database stores product information and category associations.
 
 ## 8. Data Export
 
-The application generates three output formats.
-
-```text
-data/processed/
-â”‚
-â”œâ”€â”€ products.db
-â”œâ”€â”€ products.xlsx
-â”œâ”€â”€ products.csv
-â””â”€â”€ products.json
-```
+data/
+└── processed/
+    ├── products.db
+    ├── products.xlsx
+    ├── products.csv
+    └── products.json
 
 ### Excel
 
