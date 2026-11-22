@@ -1,97 +1,163 @@
 ﻿# E-Commerce Product Intelligence System
 
-A Python-based e-commerce product intelligence and data extraction application designed to collect, process, validate, store and export structured product information.
+A Python-based e-commerce data extraction and intelligence application designed to collect, normalize, validate, store and export structured product information from multiple data sources.
 
-The system demonstrates practical web scraping, data engineering, database management, automated testing and multi-format data export.
+The application supports HTML-based product extraction and REST API integration, with automated data processing, duplicate detection, SQLite database storage and multi-format exports.
 
 ## 1. Project Overview
 
-E-commerce businesses generate large amounts of product information across their online catalogues.
+E-commerce businesses work with large volumes of product information distributed across websites and APIs.
 
-Collecting and organizing this information manually can be time-consuming and inefficient.
+Collecting, organizing and preparing this information manually can be time-consuming.
 
-This project provides an automated workflow for extracting product information, processing records, eliminating duplicates, validating data and generating structured datasets for further analysis.
+This project implements an automated data acquisition and processing pipeline that transforms product information into structured datasets suitable for reporting, analysis and further integration.
 
-The application currently demonstrates its processing pipeline using locally stored HTML fixtures from perfume product categories.
+The system demonstrates:
 
-Live extraction is designed to operate only against sources that authorize automated access.
+- HTML product extraction.
+- REST API integration.
+- API pagination.
+- Data cleaning and normalization.
+- Data validation.
+- Duplicate detection.
+- Multi-source database management.
+- Automated Excel, CSV and JSON exports.
+- Automated software testing.
+
+The application has been demonstrated using locally stored HTML fixtures and the DummyJSON demonstration product API.
 
 ## 2. Key Features
 
-- HTTP request management using Python Requests.
-- Reusable scraper architecture.
-- Robots.txt permission checking.
-- Request rate limiting.
-- Pagination support.
+### Data Acquisition
+- HTTP communication using Python Requests.
+- Reusable HTML scraper architecture.
 - HTML parsing using BeautifulSoup.
-- Product name extraction.
-- Current and original price extraction.
-- Product URL extraction.
-- Data cleaning and normalization.
+- Product information extraction.
+- REST API integration.
+- Configurable API request parameters.
+- API pagination.
+- Request timeouts and HTTP error handling.
+- Robots.txt permission checking for HTML scraping.
+
+### Data Processing
+- Product data normalization.
+- Data cleaning.
 - Product validation.
 - Duplicate detection.
-- SQLite database storage.
+- Invalid-record handling.
+- Category-based product grouping.
+- Multi-source data processing.
+
+### Data Storage
+- SQLite database integration.
+- Structured product storage.
+- Category associations.
+- Source identification.
 - Database schema migration.
+- Configurable database paths.
+
+### Data Export
 - Excel export.
 - CSV export.
 - JSON export.
+- Centralized export management.
+
+### Software Quality
+- Modular application architecture.
 - Structured logging.
-- Automated testing with Pytest.
+- Automated tests using Pytest.
+- API client tests.
+- Pipeline integration tests.
 
 ## 3. Technology Stack
 
 | Technology | Purpose |
 |---|---|
-| Python | Core application |
-| Requests | HTTP communication |
+| Python | Core application development |
+| Requests | HTTP communication and API integration |
 | BeautifulSoup4 | HTML parsing |
-| SQLite | Database storage |
-| Pandas | Data processing and export |
-| OpenPyXL | Excel generation |
+| SQLite | Structured database storage |
+| Pandas | Data processing |
+| OpenPyXL | Excel file generation |
 | Pytest | Automated testing |
-| urllib.robotparser | Robots.txt compliance |
+| urllib.robotparser | Robots.txt evaluation |
 | Logging | Application monitoring |
 
 ## 4. System Architecture
 
-The application follows a modular architecture.
+The application supports two data acquisition approaches.
+
+### HTML Extraction Pipeline
 
 ```text
-E-Commerce Product Intelligence
-             |
-             v
-       Data Acquisition
-             |
-             v
-        Base Scraper
-             |
-             v
-       Product Parser
-             |
-             v
-       Data Cleaning
-             |
-             v
-       Data Validation
-             |
-             v
-     Duplicate Detection
-             |
-             v
-       SQLite Database
-             |
-             v
-       Export Manager
-             |
-       +-----+-----+
-       |     |     |
-       v     v     v
-     Excel  CSV   JSON
+HTML Product Pages
+        |
+        v
+   HTTP Requests
+        |
+        v
+  BeautifulSoup Parser
+        |
+        v
+  Product Extraction
+        |
+        v
+   Data Cleaning
+        |
+        v
+  Data Validation
+        |
+        v
+ Duplicate Detection
+        |
+        v
+  SQLite Database
 ```
 
-### Project Structure
+### REST API Extraction Pipeline
 
+```text
+   DummyJSON API
+         |
+         v
+    API Client
+         |
+         v
+     Pagination
+         |
+         v
+ Product Normalization
+         |
+         v
+    Data Cleaning
+         |
+         v
+   Data Validation
+         |
+         v
+  Duplicate Detection
+         |
+         v
+   SQLite Database
+```
 
+### Export Pipeline
+
+```text
+    SQLite Database
+           |
+           v
+      Export Manager
+           |
+      +----+----+
+      |    |    |
+      v    v    v
+    Excel CSV  JSON
+```
+
+## 5. Project Structure
+
+```text
 ecommerce-product-intelligence/
 │
 ├── config/
@@ -99,12 +165,14 @@ ecommerce-product-intelligence/
 │   └── logging_config.py
 │
 ├── data/
-│   └── raw/
-│       ├── original_packaging_multiple.html
-│       ├── perfume_testers_multiple.html
-│       ├── perfume_testers_page_2.html
-│       ├── sample_product_card.html
-│       └── sample_tester_product_card.html
+│   ├── raw/
+│   │   └── HTML demonstration fixtures
+│   │
+│   └── processed/
+│       ├── products.db
+│       ├── products.xlsx
+│       ├── products.csv
+│       └── products.json
 │
 ├── processors/
 │   ├── __init__.py
@@ -117,7 +185,8 @@ ecommerce-product-intelligence/
 │   ├── __init__.py
 │   ├── base_scraper.py
 │   ├── pagination.py
-│   └── perfume_scraper.py
+│   ├── perfume_scraper.py
+│   └── dummyjson_api.py
 │
 ├── storage/
 │   ├── data_exporter.py
@@ -126,29 +195,21 @@ ecommerce-product-intelligence/
 │   └── export_manager.py
 │
 ├── tests/
-│   ├── test_base_scraper.py
-│   ├── test_cleaning.py
-│   ├── test_data_exporter.py
-│   ├── test_database.py
-│   ├── test_export_manager.py
-│   ├── test_exporter.py
-│   ├── test_logging_manual.py
-│   ├── test_multi_page_pipeline.py
-│   ├── test_pagination.py
-│   ├── test_perfume_scraper.py
-│   ├── test_pipeline.py
-│   ├── test_product_parser.py
-│   └── test_validation.py
+│   ├── test_api_pipeline.py
+│   ├── test_dummyjson_api.py
+│   └── Other application test modules
 │
 ├── .gitignore
+├── api_main.py
 ├── check_robots.py
 ├── generate_test_fixtures.py
 ├── live_main.py
 ├── main.py
 ├── requirements.txt
 └── README.md
+```
 
-## 5. Installation
+## 6. Installation
 
 ### Prerequisites
 
@@ -172,7 +233,7 @@ Windows:
 python -m venv .venv
 ```
 
-Activate:
+Activate the environment:
 
 ```powershell
 .venv\Scripts\Activate.ps1
@@ -184,9 +245,37 @@ Activate:
 python -m pip install -r requirements.txt
 ```
 
-## 6. Running the Application
+## 7. Running the Application
 
-The offline processing workflow uses locally stored HTML fixtures.
+The project provides separate entry points for different execution workflows.
+
+### A. API-Based Product Extraction
+
+Execute:
+
+```bash
+python api_main.py
+```
+
+This workflow:
+
+1. Connects to the DummyJSON product API.
+2. Retrieves product records using paginated HTTP requests.
+3. Normalizes API responses into the application's product schema.
+4. Cleans and validates product records.
+5. Detects duplicate products.
+6. Stores valid records in SQLite.
+7. Exports database records into Excel, CSV and JSON.
+
+The API client uses the following endpoint:
+
+```text
+https://dummyjson.com/products
+```
+
+The demonstration API returned 194 product records during the verified execution.
+
+### B. Offline HTML Processing
 
 Execute:
 
@@ -194,19 +283,56 @@ Execute:
 python main.py
 ```
 
-The application performs:
+This workflow processes locally stored HTML fixtures.
+
+It performs:
 
 1. HTML fixture loading.
-2. Product extraction.
+2. Product information extraction.
 3. Data cleaning.
 4. Product validation.
 5. Duplicate detection.
 6. SQLite storage.
-7. Excel, CSV and JSON export.
+7. Multi-format data export.
 
-## 7. Database Storage
+### C. HTML Live Extraction
 
-The application uses SQLite for structured product storage.
+The project also contains an HTML scraper entry point:
+
+```bash
+python live_main.py
+```
+
+Live extraction must only be performed against websites that authorize automated access.
+
+The previously tested demonstration website returned HTTP 429 bot protection. Fresh live extraction from that website has therefore not been verified.
+
+## 8. API Integration
+
+The application includes a dedicated API client:
+
+```text
+scrapers/dummyjson_api.py
+```
+
+The client provides:
+
+- HTTP GET requests.
+- Configurable request timeouts.
+- Pagination using limit and skip parameters.
+- Response validation.
+- Product normalization.
+- Session management.
+
+The API integration uses DummyJSON, a public demonstration API.
+
+Its product records are sample data and should not be interpreted as verified commercial inventory.
+
+**Currency handling:** The demonstration API does not provide a currency field. The application uses a configurable USD default for normalized records. This is an application assumption, not currency information supplied by the API.
+
+## 9. Database Storage
+
+The application uses SQLite.
 
 Database location:
 
@@ -214,32 +340,55 @@ Database location:
 data/processed/products.db
 ```
 
-The database stores product information and category associations.
+The database supports product records from different acquisition sources.
 
-## 8. Data Export
+Each stored product can be associated with:
 
-data/
-└── processed/
-    ├── products.db
-    ├── products.xlsx
-    ├── products.csv
-    └── products.json
+- Product identifier.
+- Product name.
+- Product category.
+- Product code.
+- Product URL.
+- Price information.
+- Currency.
+- Discount information.
+- Source website or API.
+
+The database is designed to support multiple product data sources.
+
+## 10. Data Export
+
+The export manager coordinates the generation of three output formats.
+
+Output directory:
+
+```text
+data/processed/
+```
+
+Generated files:
+
+```text
+products.xlsx
+products.csv
+products.json
+```
 
 ### Excel
 
-Suitable for spreadsheet analysis and reporting.
+Provides a spreadsheet format suitable for business reporting and manual inspection.
 
 ### CSV
 
-Suitable for importing into other data analysis applications.
+Provides a structured tabular format suitable for importing into data analysis applications.
 
 ### JSON
 
-Suitable for APIs, programmatic processing and integration with other systems.
+Provides a machine-readable format suitable for programmatic processing and system integration.
 
-## 9. Automated Testing
+## 11. Automated Testing
 
-The project uses Pytest.
+The application uses Pytest for automated testing.
 
 Run all tests:
 
@@ -247,79 +396,106 @@ Run all tests:
 python -m pytest -v
 ```
 
-Run a concise test report:
+Run a concise report:
 
 ```bash
 python -m pytest -q
 ```
 
-Current verified test baseline:
+### Verified Test Results
+
+Latest verified test execution:
 
 ```text
-35 passed
+48 passed in 4.87s
 ```
 
-Tests cover the scraper, processing components and supporting functionality.
+The tests cover existing scraper functionality, data processing, database operations, exports, API client functionality and API pipeline integration.
 
-## 10. Responsible Data Collection
+## 12. Demonstration Results
 
-The project incorporates responsible scraping practices.
+### API Extraction Results
+
+During the latest successful API execution:
+
+| Metric | Result |
+|---|---:|
+| Products retrieved | 194 |
+| Valid products | 194 |
+| Invalid products | 0 |
+| Duplicates removed | 0 |
+| Records saved | 194 |
+
+### Combined Database Results
+
+The database contained records from two sources:
+
+| Source | Records |
+|---|---:|
+| DummyJSON API | 194 |
+| Previously collected HTML data | 72 |
+| **Total** | **266** |
+
+### Export Results
+
+| Export Format | Records |
+|---|---:|
+| Excel | 266 |
+| CSV | 266 |
+| JSON | 266 |
+
+The 266 records represent the combined database, not 266 newly retrieved API products.
+
+## 13. Responsible Data Collection
+
+The application incorporates responsible data collection practices.
 
 These include:
 
 - Robots.txt permission checking.
 - Configurable request delays.
+- HTTP request timeouts.
 - HTTP error handling.
-- Request timeouts.
-- Protection against unverified robots.txt responses.
-- Explicit handling of HTTP 429 rate limits.
+- Explicit handling of rate-limit responses.
+- Avoidance of unauthorized access restrictions.
 
-Automated extraction must only be performed against sources that authorize the activity.
+Automated collection should only be performed against sources that permit the activity.
 
-The original demonstration website returned HTTP 429 bot protection during live testing. Consequently, live extraction from that source has not been verified.
+The DummyJSON integration uses a public demonstration API. Other commercial API integrations should follow their respective provider terms, access requirements and rate limits.
 
-The offline processing pipeline has been successfully demonstrated using saved HTML fixtures.
-
-## 11. Current Demonstration Results
-
-The latest successful offline execution processed:
-
-| Metric | Result |
-|---|---:|
-| HTML pages processed | 3 |
-| Products processed | 72 |
-| Valid records | 72 |
-| Invalid records | 0 |
-| Duplicates removed | 0 |
-| Excel records exported | 72 |
-| CSV records exported | 72 |
-| JSON records exported | 72 |
-
-These results represent the saved demonstration dataset, not a live website extraction.
-
-## 12. Future Development
+## 14. Future Development
 
 Potential extensions include:
 
-- Integration with additional authorized e-commerce sources.
-- Product price monitoring.
-- Historical price tracking.
+- Additional authorized e-commerce API integrations.
+- Historical product price tracking.
 - Product availability monitoring.
-- Scheduled extraction.
-- REST API integration.
+- Scheduled data collection.
 - Product intelligence dashboards.
-- Market trend analysis.
-- Automated reporting.
+- REST API endpoints.
+- Automated market reporting.
+- Advanced product analytics.
 
-## 13. Project Status
+## 15. Project Status
 
-The core offline processing pipeline, database integration, exports and automated tests have been implemented and demonstrated.
+The core application has been implemented and successfully executed.
 
-Final documentation and authorized live-source integration are the remaining delivery milestones.
+Completed capabilities include:
 
-## 14. Author
+- HTML product extraction.
+- REST API product extraction.
+- API pagination.
+- Data normalization and cleaning.
+- Data validation.
+- Duplicate detection.
+- Multi-source SQLite storage.
+- Excel, CSV and JSON exports.
+- Automated testing.
+
+The latest verified test suite contains 48 passing tests.
+
+## 16. Author
 
 Developed as a Python automation and data engineering portfolio project.
 
-**Technologies:** Python | Web Scraping | Data Processing | SQLite | Automation | Data Export
-```
+**Technologies:** Python | Web Scraping | REST APIs | Data Engineering | SQLite | Pandas | Automation | Pytest
