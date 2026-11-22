@@ -1,11 +1,16 @@
-from processors.product_parser import extract_product, extract_products
+from processors.product_parser import (
+    extract_product,
+    extract_products
+)
+
 from processors.cleaning import clean_product
 from processors.validation import validate_product
 
 from storage.database import (
     initialize_database,
     save_products,
-    DEFAULT_DB_PATH
+    DEFAULT_DB_PATH,
+    DEFAULT_SOURCE
 )
 
 from config.logging_config import setup_logging
@@ -20,12 +25,17 @@ def process_product_html(html):
     Extracts, cleans and validates one product.
     """
 
-    logger.info("Starting single product processing.")
+    logger.info(
+        "Starting single product processing."
+    )
 
     product = extract_product(html)
 
     if product is None:
-        logger.warning("No product card found in supplied HTML.")
+
+        logger.warning(
+            "No product card found in supplied HTML."
+        )
 
         return {
             "product": None,
@@ -36,16 +46,20 @@ def process_product_html(html):
     cleaned_product = clean_product(product)
 
     logger.info(
-        f"Cleaned product: {cleaned_product.get('product_name')}"
+        f"Cleaned product: "
+        f"{cleaned_product.get('product_name')}"
     )
 
     errors = validate_product(cleaned_product)
 
     if errors:
+
         logger.warning(
             f"Product validation failed: {errors}"
         )
+
     else:
+
         logger.info(
             f"Product validated successfully: "
             f"{cleaned_product.get('product_name')}"
@@ -97,10 +111,15 @@ def process_category_pages(page_html_list):
 
             cleaned_product = clean_product(product)
 
-            product_id = cleaned_product.get("product_id")
+            product_id = cleaned_product.get(
+                "product_id"
+            )
 
             # Detect duplicate products.
-            if product_id and product_id in seen_product_ids:
+            if (
+                product_id
+                and product_id in seen_product_ids
+            ):
 
                 duplicates_removed += 1
 
@@ -154,14 +173,18 @@ def process_and_store_category_pages(
     page_html_list,
     category,
     source_url,
-    db_path=DEFAULT_DB_PATH
+    db_path=DEFAULT_DB_PATH,
+    source=DEFAULT_SOURCE
 ):
     """
     Processes category pages and saves valid products into SQLite.
+
+    The source argument identifies the original data provider.
     """
 
     logger.info(
-        f"Starting processing and database storage for: {category}"
+        f"Starting processing and database storage "
+        f"for: {category}"
     )
 
     initialize_database(db_path)
@@ -172,7 +195,8 @@ def process_and_store_category_pages(
         products=results["valid_products"],
         category=category,
         source_url=source_url,
-        db_path=db_path
+        db_path=db_path,
+        source=source
     )
 
     results["saved_to_database"] = saved_count

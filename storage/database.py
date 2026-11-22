@@ -9,6 +9,8 @@ logger = setup_logging()
 
 DEFAULT_DB_PATH = Path("data/processed/products.db")
 
+DEFAULT_SOURCE = "tomkardy.com.ua"
+
 
 def get_connection(db_path=DEFAULT_DB_PATH):
     """
@@ -23,7 +25,9 @@ def get_connection(db_path=DEFAULT_DB_PATH):
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
 
-        logger.info(f"Database connection established: {db_path}")
+        logger.info(
+            f"Database connection established: {db_path}"
+        )
 
         return connection
 
@@ -57,6 +61,7 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
         if products_table_exists:
 
             cursor.execute("PRAGMA table_info(products)")
+
             columns = {
                 row["name"]
                 for row in cursor.fetchall()
@@ -65,7 +70,10 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
             # Migrate the previous database structure.
             if "category" in columns:
 
-                logger.info("Old database schema detected. Starting migration.")
+                logger.info(
+                    "Old database schema detected. "
+                    "Starting migration."
+                )
 
                 cursor.execute("""
                     ALTER TABLE products
@@ -131,7 +139,9 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
 
         if legacy_exists:
 
-            logger.info("Migrating existing product records.")
+            logger.info(
+                "Migrating existing product records."
+            )
 
             cursor.execute("""
                 INSERT OR IGNORE INTO products (
@@ -146,6 +156,7 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
                     discount,
                     availability
                 )
+
                 SELECT
                     product_id,
                     source,
@@ -157,6 +168,7 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
                     currency,
                     discount,
                     availability
+
                 FROM products_legacy
             """)
 
@@ -168,29 +180,40 @@ def initialize_database(db_path=DEFAULT_DB_PATH):
                     source_url,
                     collected_at
                 )
+
                 SELECT
                     product_id,
                     source,
                     category,
                     source_url,
                     collected_at
+
                 FROM products_legacy
+
                 WHERE category IS NOT NULL
             """)
 
-            cursor.execute("DROP TABLE products_legacy")
+            cursor.execute(
+                "DROP TABLE products_legacy"
+            )
 
-            logger.info("Database migration completed successfully.")
+            logger.info(
+                "Database migration completed successfully."
+            )
 
         connection.commit()
 
-        logger.info("Database initialized successfully.")
+        logger.info(
+            "Database initialized successfully."
+        )
 
     except Exception:
 
         connection.rollback()
 
-        logger.exception("Database initialization failed.")
+        logger.exception(
+            "Database initialization failed."
+        )
 
         raise
 
@@ -203,19 +226,25 @@ def save_products(
     products,
     category,
     source_url,
-    db_path=DEFAULT_DB_PATH
+    db_path=DEFAULT_DB_PATH,
+    source=DEFAULT_SOURCE
 ):
     """
     Save products and their category relationships.
+
+    The source parameter identifies where the products
+    originated.
+
+    Existing callers continue using Tomkardy by default.
     """
 
     connection = get_connection(db_path)
 
     saved_count = 0
 
-    source = "tomkardy.com.ua"
-
-    collected_at = datetime.now(timezone.utc).isoformat()
+    collected_at = datetime.now(
+        timezone.utc
+    ).isoformat()
 
     try:
 
@@ -306,8 +335,9 @@ def save_products(
         connection.commit()
 
         logger.info(
-            f"Successfully saved {saved_count} product-category records "
-            f"for {category}."
+            f"Successfully saved {saved_count} "
+            f"product-category records for {category} "
+            f"from {source}."
         )
 
         return saved_count
@@ -377,14 +407,17 @@ def get_all_products(db_path=DEFAULT_DB_PATH):
         ]
 
         logger.info(
-            f"Retrieved {len(products)} product-category records."
+            f"Retrieved {len(products)} "
+            f"product-category records."
         )
 
         return products
 
     except sqlite3.Error:
 
-        logger.exception("Failed to retrieve products.")
+        logger.exception(
+            "Failed to retrieve products."
+        )
 
         raise
 
