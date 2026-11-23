@@ -499,3 +499,17 @@ The latest verified test suite contains 48 passing tests.
 Developed as a Python automation and data engineering portfolio project.
 
 **Technologies:** Python | Web Scraping | REST APIs | Data Engineering | SQLite | Pandas | Automation | Pytest
+
+## Application Screenshots
+
+### 1. API Data Extraction
+![API Extraction](portfolio-screenshots/01-api-extraction.png)
+
+### 2. Database Verification
+![Database Verification](portfolio-screenshots/02-database-verification.png)
+
+### 3. Data Export Outputs
+![Exported Files](portfolio-screenshots/03-exported-files.png)
+
+### 4. Automated Testing
+![Automated Tests](portfolio-screenshots/04-automated-tests.png)
